@@ -1,0 +1,182 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Performant Layouts With Javascript - Michael's Code</title>
+	<meta name="author" content="Michael Whitehead">
+
+	
+	<meta name="description" content="Performant Layouts With Javascript Apr 26th, 2014 HTML5 is great, but&hellip; The benefits of using html5 as your primary platform span from cheap &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Michael's Code" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://whitehead1415.github.io/blog/2014/04/26/performant-custom-layouts-with-javascript/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="https://github.com/whitehead1415">GitHub</a></li>
+</ul>
+</nav>
+<!-- <nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		<a class="github" href="https://github.com/whitehead1415" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav> -->
+<div class="profile-container">
+  <div class="profilepic">
+    <script src="/javascripts/md5.js"></script>
+    <script type="text/javascript">
+$(function(){
+  $('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("whitehead1415@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+});
+    </script>
+  </div>
+  <hgroup>
+  <h1 class="site-title"><a href="/">Michael's Code</a></h1>
+  
+  <p class="site-subtitle">It's not about writing the code, it's about living the code.</p>
+  
+  </hgroup>
+</div>
+</header>
+			</div>
+		</div>
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="article-inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  
+	<h1 class="title" itemprop="name">Performant Layouts With Javascript</h1>
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+  <div class="post-date"><time datetime="2014-04-26T12:08:06-06:00" data-updated="true" itemprop="datePublished">Apr 26<span>th</span>, 2014</time></div>
+	<div class="entry-content" itemprop="articleBody"><h2>HTML5 is great, but&hellip;</h2>
+
+<p>The benefits of using html5 as your primary platform span from cheap development to write once run everywhere.
+The main problem that I see is the performance problem.
+There are other problems with the javascript language itself but I&rsquo;m saving that for another blog post.
+The performance issue however is what forces developers to write native code for custom user interfaces.
+I love writing native code for applications, because you can&rsquo;t beat the bare metal performance.
+However I hate vender lockin.
+I hate how the Android and iOS platforms don&rsquo;t let developers choose their own toolkits.
+For that reason I am would like to see HTML5 succeed.</p>
+
+<h2>Along came Famous</h2>
+
+<p>Before <a href="http://www.youtube.com/watch?v=dClmexNib-I">Famous</a> everyone thought that we were held back by the browsers.
+Famous came out with the idea of building your own javascript rendering engine that can take advantage of gpu acceleration.
+Unfortunately they took really long to release.
+Right now they are inviting 500 new developers each day to try out their framework.
+I think every web developer should go checkout what they have done on <a href="https://github.com/Famous/famous">github</a></p>
+
+<h2>Famous!!! YOU ARE TAKING TOO LONG!!!</h2>
+
+<p>Months ago we had a project with a user interface that was way too slow.
+I was inspired by Famous to use css3 transitions in a javscript layout engine to improve performance.
+It works wonderfully. I put the primitive utility on <a href="https://github.com/whitehead1415/float-up">github</a>. The idea of the utility is to replace the broken float styling in browsers.
+So you can now float up, instead of floating left and adjusting the width of everything to create a side scrolling app/webpage.</p>
+
+<h2>Demo</h2>
+
+<pre class="codepen" data-height="1000" data-type="result" data-href="fkwnG" data-user="result"><code> </code></pre>
+
+
+<script async src="http://codepen.io:/assets/embed/ei.js"></script>
+
+
+<p>The demo can even be sped up if you swap out jquery ui for a faster drag and drop library.</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="share_icon_group addthis_toolbox addthis_default_style addthis_32x32_style">
+	
+  <a class="share_icon addthis_button_preferred_1"></a>
+	
+	
+	<a class="share_icon addthis_button_preferred_2" fb:like:layout="button_count"></a>
+	
+	
+	<a class="share_icon addthis_button_preferred_4"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2014 - Michael Whitehead -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+<p>Theme: <a href="https://github.com/qingwang/octopress-theme-yinyang">YinYang</a></p>
+</footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>
+            http://whitehead1415.github.io/blog/2014/01/19/dependency-injection-with-the-reader-monad/
+        </loc>
+        <lastmod>2014-04-26T13:26:42-06:00</lastmod>
+    </url>
+    <url>
+        <loc>http://whitehead1415.github.io/blog/2014/04/25/what-is-a-monad/</loc>
+        <lastmod>2014-04-26T13:26:42-06:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://whitehead1415.github.io/blog/2014/04/26/performant-custom-layouts-with-javascript/
+        </loc>
+        <lastmod>2014-04-26T13:26:42-06:00</lastmod>
+    </url>
+    <url>
+        <loc>http://whitehead1415.github.io/</loc>
+        <lastmod>2014-04-26T13:26:42-06:00</lastmod>
+    </url>
+    <url>
+        <loc>http://whitehead1415.github.io/blog/archives/</loc>
+        <lastmod>2014-04-26T13:26:42-06:00</lastmod>
+    </url>
+    <url>
+        <loc>http://whitehead1415.github.io/robots.txt</loc>
+        <lastmod>2014-04-26T13:26:42-06:00</lastmod>
+    </url>
+</urlset>

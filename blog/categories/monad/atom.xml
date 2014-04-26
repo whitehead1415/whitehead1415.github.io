@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Monad | Michael's Code]]></title>
+  <link href="http://whitehead1415.github.io/blog/categories/monad/atom.xml" rel="self"/>
+  <link href="http://whitehead1415.github.io/"/>
+  <updated>2014-04-26T13:39:53-06:00</updated>
+  <id>http://whitehead1415.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Whitehead]]></name>
+    <email><![CDATA[whitehead1415@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection With the Reader Monad]]></title>
+    <link href="http://whitehead1415.github.io/blog/2014/01/19/dependency-injection-with-the-reader-monad/"/>
+    <updated>2014-01-19T20:46:34-07:00</updated>
+    <id>http://whitehead1415.github.io/blog/2014/01/19/dependency-injection-with-the-reader-monad</id>
+    <content type="html"><![CDATA[<h2>Why not just use a Dependency Injection Framework?</h2>
+
+<p>Usually I like to use SubCut for my scala projects. SubCut is easy to use, but I recently started a Spray project and for some reason the SubCut was not injecting the mock dependencies into the actors. This made me go looking for alternatives. I have investigated guice and the cake pattern but I really wanted something extremely simple. I found <a href="http://www.youtube.com/watch?v=ZasXwtTRkio">Dead Simple Dependency Injection by Runar</a>. Thanks to him I found the simple solution that I was looking for.</p>
+
+<p>There are many different posible ways to configure the reader monad. Another great resource is the scalaz library <a href="http://blog.originate.com/blog/2013/10/21/reader-monad-for-dependency-injection/">here is a link</a> for an example of how to use it. This post is only how I personally like to set it up.</p>
+
+<h2>The Reader Monad</h2>
+
+<p>I don&rsquo;t believe that you really need to understand what a monad is in order to use one. If you use scala&rsquo;s Option or Either then you already know how to use a monad. I can appreciate the desire to gain a deep understanding of what a monad is and how it works, but the purpose of this post is only to show how to use a reader monad for dependency injection.</p>
+
+<p>A monad is just a wrapper that holds a value. It has two functions one where it changes the value inside the wrapper from one type to another type. The other function flattens the wrappers in the case where you have a wrapper[wrapper[wrapper[value]]] it will flatten it to a wrapper[value] in scala these functions are called map and flatmap respectively.</p>
+
+<p>The Reader Monad:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Reader</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;g:%20C%20=&gt;%20A&quot;</span><span class="o">&gt;</span><span class="n">C</span><span class="o">,</span> <span class="n">A</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">C</span><span class="o">)</span> <span class="k">=</span> <span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+</span><span class='line'><span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">C</span><span class="o">)</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">f</span><span class="o">(</span><span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">)))</span>
+</span><span class='line'><span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">B</span><span class="o">](</span><span class="n">f</span> <span class="n">A</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="nc">Reader</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">C</span><span class="o">)</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">f</span><span class="o">(</span><span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">))(</span><span class="n">c</span><span class="o">))</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>We will need a way to configure multiple dependencies. Again there are many possible variations to do this but here is the way that I like to do it. Create a trait that has unimplemented functions for all the dependencies that you need. Also you need to create a run function that will pass the dependencies into the reader monad.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">trait</span> <span class="nc">Config</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">connection</span><span class="k">:</span> <span class="kt">Connection</span>
+</span><span class='line'><span class="k">def</span> <span class="n">emailService</span><span class="k">:</span> <span class="kt">EmailService</span>
+</span><span class='line'><span class="k">def</span> <span class="n">run</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">Config</span>, <span class="kt">A</span><span class="o">])</span> <span class="k">=</span> <span class="n">f</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Some basic services:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Connection</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">queryDB</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">id</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">MockConnection</span> <span class="k">extends</span> <span class="nc">Connection</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">override</span> <span class="k">def</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;Mock User&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">EmailService</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;Sending email to User: &quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">MockEmailService</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">override</span> <span class="k">def</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;Mock Email Service&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So now we need to setup our functions so that we can inject our dependencies.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">getUser</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">Config</span><span class="o">)</span> <span class="o">=&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">queryDB</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;)&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">Config</span><span class="o">)</span> <span class="o">=&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">.</span><span class="n">emailService</span><span class="o">.</span><span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>As you can see all we are doing is currying. There are many ways that we could pass our dependencies into these functions for example we could do something like the following.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//normal connection</span>
+</span><span class='line'><span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="n">getUser</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">foobar</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)(</span><span class="k">new</span> <span class="nc">Connection</span><span class="o">)</span>
+</span><span class='line'><span class="c1">//mock Connection</span>
+</span><span class='line'><span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="n">getUser</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">foobar</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)(</span><span class="k">new</span> <span class="nc">MockConnection</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>So in conclusion this is a very flexible way to manage your dependencies. Here is the full code</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;!/</span><span class="n">bin</span><span class="o">/</span><span class="n">sh</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">exec</span> <span class="n">scala</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">$0</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">$</span><span class="o">@&amp;</span><span class="n">rdquo</span><span class="o">;</span>
+</span><span class='line'><span class="o">!#&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">object</span> <span class="nc">DIExample</span> <span class="k">extends</span> <span class="nc">Config</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">connection</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Connection</span>
+</span><span class='line'><span class="k">def</span> <span class="n">emailService</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmailService</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">user1</span> <span class="k">=</span> <span class="n">run</span><span class="o">(</span><span class="n">getUser</span><span class="o">(</span><span class="s">&quot;foobar&quot;</span><span class="o">))</span>
+</span><span class='line'>    <span class="n">run</span><span class="o">(</span><span class="n">sendEmail</span><span class="o">(</span><span class="s">&quot;foobar&quot;</span><span class="o">))</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">user2</span> <span class="k">=</span> <span class="n">run</span><span class="o">(</span><span class="n">getUserAndSendEmail</span><span class="o">(</span><span class="s">&quot;foobar&quot;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="n">getUserAndSendEmail</span><span class="o">(</span><span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">Config</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+</span><span class='line'>    <span class="k">for</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">user</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;-</span> <span class="n">getUser</span><span class="o">(</span><span class="n">userName</span><span class="o">)</span>
+</span><span class='line'>        <span class="n">foo</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;-</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">yield</span> <span class="n">user</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="n">getUser</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">Config</span><span class="o">)</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span>
+</span><span class='line'>    <span class="n">c</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">queryDB</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">Config</span><span class="o">)</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span>
+</span><span class='line'>    <span class="n">c</span><span class="o">.</span><span class="n">emailService</span><span class="o">.</span><span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="o">)</span>
+</span><span class='line'><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;//</span> <span class="nc">SERVICES</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">Connection</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">queryDB</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">id</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">MockConnection</span> <span class="k">extends</span> <span class="nc">Connection</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">override</span> <span class="k">def</span> <span class="n">queryDB</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&quot;Mock User&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">EmailService</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">sendEmail</span><span class="o">(</span><span class="n">user</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;Sending email to User: &quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;//</span> <span class="nc">READER</span> <span class="nc">MONAD</span> <span class="o">+</span> <span class="nc">CONFIG</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">case</span> <span class="k">class</span> <span class="nc">Reader</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;g:%20C%20=&gt;%20A&quot;</span><span class="o">&gt;</span><span class="n">C</span><span class="o">,</span> <span class="n">A</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">C</span><span class="o">)</span> <span class="k">=</span> <span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+</span><span class='line'><span class="k">def</span> <span class="n">map</span><span class="o">[</span><span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">B</span><span class="o">)</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">C</span><span class="o">)</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">f</span><span class="o">(</span><span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">)))</span>
+</span><span class='line'><span class="k">def</span> <span class="n">flatMap</span><span class="o">[</span><span class="kt">B</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="nc">Reader</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">])</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">C</span>, <span class="kt">B</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Reader</span><span class="o">((</span><span class="n">c</span><span class="k">:</span> <span class="kt">C</span><span class="o">)</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">f</span><span class="o">(</span><span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">))(</span><span class="n">c</span><span class="o">))</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">trait</span> <span class="nc">Config</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">def</span> <span class="n">connection</span><span class="k">:</span> <span class="kt">Connection</span>
+</span><span class='line'><span class="k">def</span> <span class="n">emailService</span><span class="k">:</span> <span class="kt">EmailService</span>
+</span><span class='line'><span class="k">def</span> <span class="n">run</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">f</span><span class="k">:</span> <span class="kt">Reader</span><span class="o">[</span><span class="kt">Config</span>, <span class="kt">A</span><span class="o">])</span> <span class="k">=</span> <span class="n">f</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="nc">DIExample</span><span class="o">.</span><span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="o">)&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,95 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE HTML>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Michael's Code</title>
-	<meta name="author" content="Michael Whitehead">
+  <title><![CDATA[Michael's Code]]></title>
+  <link href="http://whitehead1415.github.io/atom.xml" rel="self"/>
+  <link href="http://whitehead1415.github.io/"/>
+  <updated>2014-04-26T13:39:53-06:00</updated>
+  <id>http://whitehead1415.github.io/</id>
+  <author>
+    <name><![CDATA[Michael Whitehead]]></name>
+    <email><![CDATA[whitehead1415@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-	
-	<meta name="description" content="Performant Layouts With Javascript HTML5 is great, but&hellip; The benefits of using html5 as your primary platform span from cheap development to &hellip;">
-	
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link href="/atom.xml" rel="alternate" title="Michael's Code" type="application/atom+xml">
-	
-	<link rel="canonical" href="http://whitehead1415.github.io/">
-	<link href="/favicon.png" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
-	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-</head>
-
-
-<body>
-	<div class="container">
-		<div class="left-col">
-			<div class="intrude-less">
-			<header id="header" class="inner"><nav id="main-nav"><ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-  <li><a href="https://github.com/whitehead1415">GitHub</a></li>
-</ul>
-</nav>
-<!-- <nav id="sub-nav">
-	<div class="social">
-		
-		
-		
-		
-		<a class="github" href="https://github.com/whitehead1415" title="GitHub">GitHub</a>
-		
-		
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-	</div>
-</nav> -->
-<div class="profile-container">
-  <div class="profilepic">
-    <script src="/javascripts/md5.js"></script>
-    <script type="text/javascript">
-$(function(){
-  $('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("whitehead1415@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
-});
-    </script>
-  </div>
-  <hgroup>
-  <h1 class="site-title"><a href="/">Michael's Code</a></h1>
   
-  <p class="site-subtitle">It's not about writing the code, it's about living the code.</p>
-  
-  </hgroup>
-</div>
-</header>
-			</div>
-		</div>
-		<div class="mid-col">
-			
-				
-			
-			<div class="mid-col-container">
-				<div id="content" class="article-inner">
-<div itemscope itemtype="http://schema.org/Blog">
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name"><a href="/blog/2014/04/26/performant-custom-layouts-with-javascript/" itemprop="url">Performant Layouts With Javascript</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2>HTML5 is great, but&hellip;</h2>
+  <entry>
+    <title type="html"><![CDATA[Performant Layouts With Javascript]]></title>
+    <link href="http://whitehead1415.github.io/blog/2014/04/26/performant-custom-layouts-with-javascript/"/>
+    <updated>2014-04-26T12:08:06-06:00</updated>
+    <id>http://whitehead1415.github.io/blog/2014/04/26/performant-custom-layouts-with-javascript</id>
+    <content type="html"><![CDATA[<h2>HTML5 is great, but&hellip;</h2>
 
 <p>The benefits of using html5 as your primary platform span from cheap development to write once run everywhere.
 The main problem that I see is the performance problem.
@@ -124,18 +53,15 @@ So you can now float up, instead of floating left and adjusting the width of eve
 
 
 <p>The demo can even be sped up if you swap out jquery ui for a faster drag and drop library.</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name"><a href="/blog/2014/04/25/what-is-a-monad/" itemprop="url">What Is a Monad</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2>Words of encouragement</h2>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What Is a Monad]]></title>
+    <link href="http://whitehead1415.github.io/blog/2014/04/25/what-is-a-monad/"/>
+    <updated>2014-04-25T22:43:25-06:00</updated>
+    <id>http://whitehead1415.github.io/blog/2014/04/25/what-is-a-monad</id>
+    <content type="html"><![CDATA[<h2>Words of encouragement</h2>
 
 <p>A monad is very simple.
 Yes that is right I said simple.
@@ -226,18 +152,15 @@ In javascript futures and promises are used to write asynchronous programs in a 
 In my previous post I showed how monads can be used to replace dependency injection.
 Once you start using monads you can compose them by using monad transformers.
 Remember the sum example from above well if you wrote your program in monadic style you could use their power to reduce your code size.</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name"><a href="/blog/2014/01/19/dependency-injection-with-the-reader-monad/" itemprop="url">Dependency Injection With the Reader Monad</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2>Why not just use a Dependency Injection Framework?</h2>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dependency Injection With The Reader Monad]]></title>
+    <link href="http://whitehead1415.github.io/blog/2014/01/19/dependency-injection-with-the-reader-monad/"/>
+    <updated>2014-01-19T20:46:34-07:00</updated>
+    <id>http://whitehead1415.github.io/blog/2014/01/19/dependency-injection-with-the-reader-monad</id>
+    <content type="html"><![CDATA[<h2>Why not just use a Dependency Injection Framework?</h2>
 
 <p>Usually I like to use SubCut for my scala projects. SubCut is easy to use, but I recently started a Spray project and for some reason the SubCut was not injecting the mock dependencies into the actors. This made me go looking for alternatives. I have investigated guice and the cake pattern but I really wanted something extremely simple. I found <a href="http://www.youtube.com/watch?v=ZasXwtTRkio">Dead Simple Dependency Injection by Runar</a>. Thanks to him I found the simple solution that I was looking for.</p>
 
@@ -499,43 +422,7 @@ Remember the sum example from above well if you wrote your program in monadic st
 
 
 
-
-		
-		
-	</div>
-
-</article>
-
-</div>
-<nav id="pagenavi">
-    
-    
-    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
-</nav>
-</div>
-			</div>
-			<footer id="footer" class="inner"><p>
-  Copyright &copy; 2014 - Michael Whitehead -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-<p>Theme: <a href="https://github.com/qingwang/octopress-theme-yinyang">YinYang</a></p>
-</footer>
-			<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-
-
-
-
-
-		</div>
-	</div>
-</body>
-</html>
+]]></content>
+  </entry>
+  
+</feed>
